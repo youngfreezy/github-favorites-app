@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { Box } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "react-query";
-import { StarsConfigProvider,  } from "./contexts/StarsContext";
+import { StarsConfigProvider } from "./contexts/StarsContext";
 import { transformRepo } from "./helpers/helpers";
 import SearchBar from "./components/SearchBar";
 import RepoList from "./components/RepoList";
@@ -11,11 +11,8 @@ import { throttle } from "lodash";
 export interface RawRepo {
   id: string | number;
   full_name?: string;
-  fullName?: string;
-  createdAt?: string;
   created_at?: string;
   stargazers_count?: number;
-  stargazersCount?: number | undefined;
   language?: string;
   url: string;
 }
