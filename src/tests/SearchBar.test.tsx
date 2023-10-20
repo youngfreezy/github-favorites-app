@@ -42,10 +42,14 @@ describe("SearchBar", () => {
 
     const { getByPlaceholderText, findByText } = render(
       <SearchBar
-        onSearch={handleSearch}
         onSelect={handleSelect}
-        value=""
-        setSearchTerm={setSearchTerm}
+        searchConfig={{
+          isSearchLoading: false,
+          setIsSearchLoading: () => {},
+          setSearchTerm,
+          handleSearch,
+          searchTerm: "blah",
+        }}
       />
     );
 
