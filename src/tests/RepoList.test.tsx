@@ -35,6 +35,7 @@ describe("RepoList", () => {
   it("renders a list of repositories", () => {
     const { getByTestId } = render(
       <RepoList
+        isLoading={false}
         repos={mockRepos}
         sortType={{ type: "none", direction: "asc" }}
         onRepoRemove={() => {}}
@@ -48,6 +49,7 @@ describe("RepoList", () => {
   it("sorts repositories based on stargazersCount", () => {
     const { container } = render(
       <RepoList
+        isLoading={false}
         repos={mockRepos}
         sortType={{ type: "stargazersCount", direction: "desc" }}
         onRepoRemove={() => {}}
@@ -62,6 +64,7 @@ describe("RepoList", () => {
   it("sorts repositories based on createdAt", () => {
     const { container } = render(
       <RepoList
+        isLoading={false}
         repos={mockRepos}
         sortType={{ type: "createdAt", direction: "asc" }}
         onRepoRemove={() => {}}
@@ -77,6 +80,7 @@ describe("RepoList", () => {
     const handleRemove = jest.fn();
     const { getAllByText } = render(
       <RepoList
+        isLoading={false}
         repos={mockRepos}
         sortType={{ type: "none", direction: "asc" }}
         onRepoRemove={handleRemove}
