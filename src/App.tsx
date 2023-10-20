@@ -29,6 +29,7 @@ export interface Repo {
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSearchLoading, setIsSearchLoading] = useState<boolean>(false);
   const [repos, setRepos] = useState<Repo[]>([]);
   const [sortType, setSortType] = useState<{
     type: "stargazersCount" | "createdAt" | "none";
@@ -125,14 +126,18 @@ const App: React.FC = () => {
     <StarsConfigProvider>
       <Box padding="5rem">
         <SearchBar
-          value={searchTerm}
-          onSearch={handleSearch}
           onSelect={handleSelectRepo}
-          setSearchTerm={setSearchTerm}
+          searchConfig={{
+            isSearchLoading,
+            setIsSearchLoading,
+            setSearchTerm,
+            handleSearch,
+            searchTerm,
+          }}
         />
         <SortDropdown value={sortType} onChange={setSortType} />
         <RepoList
-          isLoading={isLoading}
+          isLoading={isLoading || isSearchLoading}
           sortType={sortType}
           repos={repos}
           onRepoRemove={handleRepoRemove}

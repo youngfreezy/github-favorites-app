@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import {
   VStack,
@@ -19,23 +19,33 @@ import { useStarsConfig } from "../contexts/StarsContext";
 import { fetchReferenceRepoStars } from "../helpers/apiHelpers";
 
 interface SearchBarProps {
-  value: string;
-  onSearch: (term: string) => void;
   onSelect: (selectedRepo: Repo) => void;
-  setSearchTerm: (term: string) => void;
+
+  searchConfig: {
+    isSearchLoading: boolean;
+    setIsSearchLoading: Dispatch<SetStateAction<boolean>>;
+    setSearchTerm: (term: string) => void;
+    handleSearch: (term: string) => void;
+    searchTerm: string;
+  };
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   onSelect,
-  value,
-  onSearch,
-  setSearchTerm,
+
+  searchConfig,
 }) => {
+  const {
+    handleSearch: onSearch,
+    setSearchTerm,
+    searchTerm: value,
+    setIsSearchLoading,
+    isSearchLoading,
+  } = searchConfig;
   const [results, setResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchRepos = async (query: string) => {
-    setLoading(true);
+    setIsSearchLoading(true);
     try {
       const { data } = await axios.get(
         `https://api.github.com/search/repositories?q=${query}`
@@ -45,7 +55,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       console.error("Error fetching repos:", error);
       setResults([]);
     } finally {
-      setLoading(false);
+      setIsSearchLoading(false);
     }
   };
 
@@ -89,7 +99,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             }}
             transition="all 0.3s"
           />
-          {loading ? (
+          {isSearchLoading ? (
             <InputRightElement marginRight={2}>
               <Spinner size="sm" color="blue.500" />
             </InputRightElement>
