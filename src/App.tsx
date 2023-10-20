@@ -48,33 +48,30 @@ const App: React.FC = () => {
     };
   };
 
-  const getPersistedReposOnMount = async () => {
-    console.log("FETCHING ONLY ONCE, WAS FETCHING TWICE BEFORE...");
-    const resHealth = await fetch("http://localhost:4000/health", {
-      method: "GET",
+  const throttledFetch = useMemo(() => {
+    const getPersistedReposOnMount = async () => {
+      console.log("FETCHING ONLY ONCE, WAS FETCHING TWICE BEFORE...");
+      const resHealth = await fetch("http://localhost:4000/health", {
+        method: "GET",
+      });
+      const bodyHealth = await resHealth.json();
+      if (bodyHealth.message !== "Server is healthy") return;
+      const res = await fetch("http://localhost:4000/repo/", {
+        method: "GET",
+      });
+      const body = await res.json();
+      const transformedRepos: Repo[] = body.repos?.map(transformRepo);
+      setRepos(transformedRepos);
+    };
+    return throttle(() => getPersistedReposOnMount(), 10000, {
+      leading: true,
+      trailing: true,
     });
-    const bodyHealth = await resHealth.json();
-    if (bodyHealth.message !== "Server is healthy") return;
-    const res = await fetch("http://localhost:4000/repo/", {
-      method: "GET",
-    });
-    const body = await res.json();
-    const transformedRepos: Repo[] = body.repos?.map(transformRepo);
-    setRepos(transformedRepos);
-  };
-
-  const throttledFetch = useMemo(
-    () =>
-      throttle(() => getPersistedReposOnMount(), 10000, {
-        leading: true,
-        trailing: true,
-      }),
-    []
-  );
+  }, []);
 
   useEffect(() => {
     throttledFetch();
-  }, []);
+  }, [throttledFetch]);
 
   const addRepoMutation = useMutation(
     (newRepo: RawRepo) => {

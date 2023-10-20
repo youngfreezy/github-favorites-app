@@ -1,7 +1,8 @@
-const express = require("express");
-const axios = require("axios");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+
+import express, { Request, Response } from 'express';
+import axios from "axios";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 const app = express();
 const port = 4000;
@@ -9,22 +10,22 @@ const port = 4000;
 // Middleware
 app.use(bodyParser.json());
 // un comment for local uncontainerized testing
-// const REPO_SERVER_URL = "http://localhost:8080";
+const REPO_SERVER_URL = "http://localhost:8080";
 
 
 // SEE NOTE: this url depends on the name of the container in your docker daemon that is exposing port 8080
-const REPO_SERVER_URL = "http://github-fav-repos-reposerver-1:8080";
+// const REPO_SERVER_URL = "http://github-fav-repos-reposerver-1:8080";
 
 app.use(cors());
 
 // Endpoints
-app.get("/health", (req: any, res: any) => {
+app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({
     message: "Server is healthy",
   });
 });
 
-app.get("/repo/", async (req: any, res: any) => {
+app.get("/repo/", async (req: Request, res: Response) => {
   try {
     const { data } = await axios.get(`${REPO_SERVER_URL}/repo/`);
     res.json(data);
@@ -38,7 +39,7 @@ app.get("/repo/", async (req: any, res: any) => {
   }
 });
 
-app.post("/repo/", async (req: any, res: any) => {
+app.post("/repo/", async (req: Request, res: Response) => {
   try {
     const { data } = await axios.post(`${REPO_SERVER_URL}/repo/`, req.body);
     res.json(data);
@@ -50,7 +51,7 @@ app.post("/repo/", async (req: any, res: any) => {
   }
 });
 
-app.delete("/repo/:repoId", async (req: any, res: any) => {
+app.delete("/repo/:repoId", async (req: Request, res: Response) => {
   const repoId = req.params.repoId;
 
   if (!repoId) {
