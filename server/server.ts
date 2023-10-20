@@ -17,10 +17,13 @@ const REPO_SERVER_URL = "http://github-fav-repos-reposerver-1:8080";
 app.use(cors());
 
 // Endpoints
-app.get("/health", (req: Request, res: Response) => {
-  res.status(200).json({
-    message: "Server is healthy",
-  });
+app.get("/health", async (req: Request, res: Response) => {
+  const { data } = await axios.get(`${REPO_SERVER_URL}/health`);
+  if (data === "OK") {
+    res.status(200).json({
+      message: "Server is healthy",
+    });
+  }
 });
 
 app.get("/repo/", async (req: Request, res: Response) => {
