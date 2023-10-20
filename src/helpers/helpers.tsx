@@ -1,4 +1,4 @@
-import { RawRepo, Repo } from "../App";
+import { Repo } from "../App";
 
 export const transformRepo = (repo: any): Repo => {
   return {
