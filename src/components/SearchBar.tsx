@@ -133,7 +133,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 </Text>
                 <HStack>
                   <Text fontSize="sm" color="blue.400">
-                    {repo.language || "Unknown"}
+                    {repo.language || "Unknown Language"}
                   </Text>
                   <Star stargazers_count={repo.stargazers_count} />
                 </HStack>

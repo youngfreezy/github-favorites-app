@@ -16,7 +16,7 @@ const RepoItem: React.FC<RepoItemProps> = ({ repo, onRemove }) => {
         <VStack align="start" flex="1">
           <Text fontWeight="bold">{repo.fullName}</Text>
           <Star stargazers_count={repo.stargazersCount} />
-          <Text>Language: {repo.language || "Unknown"}</Text>
+          <Text>Language: {repo.language || "Unknown Language"}</Text>
           <Text>Created At: {repo.createdAt}</Text>
           <Text>URL: {repo.url}</Text>
         </VStack>
