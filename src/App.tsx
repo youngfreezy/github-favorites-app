@@ -52,10 +52,7 @@ const App: React.FC = () => {
       const transformedRepos: Repo[] = body.repos?.map(transformRepo);
       setRepos(transformedRepos);
     };
-    return throttle(() => getPersistedReposOnMount(), 2000, {
-      leading: true,
-      trailing: true,
-    });
+    return throttle(() => getPersistedReposOnMount(), 2000);
   }, []);
 
   useEffect(() => {
