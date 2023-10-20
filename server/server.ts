@@ -10,11 +10,11 @@ const port = 4000;
 // Middleware
 app.use(bodyParser.json());
 // un comment for local uncontainerized testing
-const REPO_SERVER_URL = "http://localhost:8080";
+// const REPO_SERVER_URL = "http://localhost:8080";
 
 
 // SEE NOTE: this url depends on the name of the container in your docker daemon that is exposing port 8080
-// const REPO_SERVER_URL = "http://github-fav-repos-reposerver-1:8080";
+const REPO_SERVER_URL = "http://github-fav-repos-reposerver-1:8080";
 
 app.use(cors());
 
