@@ -34,7 +34,8 @@
     "start": "concurrently \"react-scripts start\" \"ts-node server/server.ts\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-server": "tsc"
   },
   "eslintConfig": {
     "extends": [
