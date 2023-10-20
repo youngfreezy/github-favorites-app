@@ -50,7 +50,6 @@ const App: React.FC = () => {
 
   const throttledFetch = useMemo(() => {
     const getPersistedReposOnMount = async () => {
-      console.log("FETCHING ONLY ONCE, WAS FETCHING TWICE BEFORE...");
       const resHealth = await fetch("http://localhost:4000/health", {
         method: "GET",
       });
@@ -63,7 +62,7 @@ const App: React.FC = () => {
       const transformedRepos: Repo[] = body.repos?.map(transformRepo);
       setRepos(transformedRepos);
     };
-    return throttle(() => getPersistedReposOnMount(), 10000, {
+    return throttle(() => getPersistedReposOnMount(), 2000, {
       leading: true,
       trailing: true,
     });
