@@ -18,3 +18,6 @@ This application allows users to search for GitHub repositories and view a list 
 
 ### Steps to run the  \App using Docker:
 in the root of the project run `docker-compose build && docker-compose up`
+
+see note in `server/server.ts`
+if you are having issues running locally, you'll need to update REPO_SERVER_URL to the name of the container in your docker daemon that is exposing port 8080
