@@ -12,13 +12,13 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { CloseIcon, StarIcon } from "@chakra-ui/icons";
-
+import { Repo } from "../App";
 import debounce from "lodash.debounce";
 
 interface SearchBarProps {
   value: string;
   onSearch: (term: string) => void;
-  onSelect: (selectedRepo: any) => void;
+  onSelect: (selectedRepo: Repo) => void;
   setSearchTerm: (term: string) => void;
 }
 
@@ -55,7 +55,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  const handleRepoSelect = (repo: any) => {
+  const handleRepoSelect = (repo: Repo) => {
     onSelect(repo);
     setResults([]);
   };
