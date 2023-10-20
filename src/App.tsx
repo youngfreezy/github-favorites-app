@@ -28,6 +28,7 @@ export interface Repo {
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [repos, setRepos] = useState<Repo[]>([]);
   const [sortType, setSortType] = useState<{
     type: "stargazersCount" | "createdAt" | "none";
@@ -37,25 +38,39 @@ const App: React.FC = () => {
     direction: "asc",
   });
   const queryClient = useQueryClient();
-
   const throttledFetch = useMemo(() => {
     const getPersistedReposOnMount = async () => {
-      const resHealth = await fetch("http://localhost:4000/health", {
-        method: "GET",
-      });
-      const bodyHealth = await resHealth.json();
-      if (bodyHealth.message !== "Server is healthy") return;
-      const res = await fetch("http://localhost:4000/repo/", {
-        method: "GET",
-      });
-      const body = await res.json();
-      const transformedRepos: Repo[] = body.repos?.map(transformRepo);
-      setRepos(transformedRepos);
+      setIsLoading(true);
+
+      try {
+        const resHealth = await fetch("http://localhost:4000/health", {
+          method: "GET",
+        });
+        const bodyHealth = await resHealth.json();
+
+        if (bodyHealth.message !== "Server is healthy") {
+          setIsLoading(false);
+          return;
+        }
+
+        const res = await fetch("http://localhost:4000/repo/", {
+          method: "GET",
+        });
+        const body = await res.json();
+        const transformedRepos: Repo[] = body.repos?.map(transformRepo);
+        setRepos(transformedRepos);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+
+      setIsLoading(false);
     };
+
     return throttle(() => getPersistedReposOnMount(), 2000);
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     throttledFetch();
   }, [throttledFetch]);
 
@@ -117,6 +132,7 @@ const App: React.FC = () => {
         />
         <SortDropdown value={sortType} onChange={setSortType} />
         <RepoList
+          isLoading={isLoading}
           sortType={sortType}
           repos={repos}
           onRepoRemove={handleRepoRemove}

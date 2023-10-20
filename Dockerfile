@@ -1,20 +1,20 @@
-# Use an official node runtime as the parent image
-FROM node:14
+FROM node:14 as build
 
-# Set the working directory in the container to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
 COPY package*.json ./
-
-# Install any needed packages specified in package.json
-RUN npm install
-
-# Copy the rest of your app's source code from your host to your image filesystem.
+RUN npm install --force
 COPY . .
+RUN npm run build
 
-# Specify port app will be listening on
+FROM node:14
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --only=production --force
+COPY --from=build /app/build ./build
+
 EXPOSE 3000
 
-# Run the app when the container launches
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:prod"]
