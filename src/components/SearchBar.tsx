@@ -49,8 +49,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     onSearch(query);
-
-    if (query.length > 2) {
+    const queryThreshold = 2;
+    if (query.length > queryThreshold) {
       debouncedFetchRepos(query);
     } else {
       setResults([]);

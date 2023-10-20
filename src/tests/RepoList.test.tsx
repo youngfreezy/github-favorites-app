@@ -1,9 +1,9 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import RepoList from "../components/RepoList";
-
+import { RepoItemProps } from "../components/RepoItem";
 // Mock RepoItem component to prevent its actual logic from running during the test.
-jest.mock("../components/RepoItem", () => (props: any) => {
+jest.mock("../components/RepoItem", () => (props: RepoItemProps) => {
   return (
     <div data-testid={`repo-item-${props.repo.id}`}>
       {props.repo.fullName}

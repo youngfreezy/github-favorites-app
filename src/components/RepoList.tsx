@@ -2,14 +2,7 @@ import React from "react";
 import { Box, OrderedList, ListItem } from "@chakra-ui/react";
 import RepoItem from "./RepoItem";
 import { orderBy } from "lodash";
-interface Repo {
-  id: string;
-  fullName: string;
-  stargazersCount: number;
-  language: string;
-  url: string;
-  createdAt: string;
-}
+import { Repo } from "../App";
 
 interface RepoListProps {
   repos: Repo[];
@@ -17,7 +10,7 @@ interface RepoListProps {
     type: "stargazersCount" | "createdAt" | "none";
     direction: "asc" | "desc";
   };
-  onRepoRemove: (repoId: string) => void;
+  onRepoRemove: (repoId: string | number) => void;
 }
 
 const RepoList: React.FC<RepoListProps> = ({

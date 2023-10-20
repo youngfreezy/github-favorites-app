@@ -5,22 +5,22 @@ import SearchBar from "./components/SearchBar";
 import RepoList from "./components/RepoList";
 import SortDropdown from "./components/SortDropdown";
 import { throttle } from "lodash";
-interface RawRepo {
-  id: number;
+export interface RawRepo {
+  id: string | number;
   full_name?: string;
   fullName?: string;
   createdAt?: string;
   created_at?: string;
   stargazers_count?: number;
-  stargazersCount?: number;
+  stargazersCount?: number | undefined;
   language?: string;
   url: string;
 }
 
-interface Repo {
-  id: string;
+export interface Repo {
+  id: string | number;
   fullName: string;
-  stargazersCount: number;
+  stargazersCount?: number | undefined;
   language: string;
   url: string;
   createdAt: string;
@@ -95,18 +95,20 @@ const App: React.FC = () => {
     setSearchTerm(term);
   };
 
-  const handleSelectRepo = (selectedRepo: Repo) => {
+  const handleSelectRepo = (selectedRepo: RawRepo | Repo) => {
     if (repos.length < 10) {
       addRepoMutation.mutate(selectedRepo as any);
       setRepos((prevRepos) =>
-        [...prevRepos, selectedRepo].map((item: any) => transformRepo(item))
+        [...prevRepos, selectedRepo].map((item: Repo | RawRepo) =>
+          transformRepo(item)
+        )
       );
     } else {
       alert("You can save up to 10 repositories only.");
     }
   };
 
-  const handleRepoRemove = useCallback(async (repoId: string) => {
+  const handleRepoRemove = useCallback(async (repoId: string | number) => {
     try {
       await fetch(`http://localhost:4000/repo/${repoId}`, {
         method: "DELETE",

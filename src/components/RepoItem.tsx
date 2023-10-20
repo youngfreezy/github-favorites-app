@@ -1,18 +1,11 @@
 import { Button, Text, VStack, HStack } from "@chakra-ui/react";
 import React from "react";
 
-interface Repo {
-  id: string;
-  fullName: string;
-  createdAt: string;
-  stargazersCount: number | undefined;
-  language: string | undefined;
-  url: string;
-}
+import { Repo } from "../App";
 
-interface RepoItemProps {
+export interface RepoItemProps {
   repo: Repo;
-  onRemove: (repoId: string) => void;
+  onRemove: (repoId: string | number) => void;
 }
 
 const RepoItem: React.FC<RepoItemProps> = ({ repo, onRemove }) => {
