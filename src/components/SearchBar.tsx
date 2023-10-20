@@ -9,6 +9,7 @@ import {
   InputGroup,
   Text,
   InputRightElement,
+  Spinner,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import Star from "./Star";
@@ -31,8 +32,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   setSearchTerm,
 }) => {
   const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchRepos = async (query: string) => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         `https://api.github.com/search/repositories?q=${query}`
@@ -41,6 +44,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
     } catch (error) {
       console.error("Error fetching repos:", error);
       setResults([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,10 +66,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
     onSelect(repo);
     setResults([]);
   };
+
   const { setLoadingReferenceStars, setReferenceStars } = useStarsConfig();
   useEffect(() => {
     fetchReferenceRepoStars(setLoadingReferenceStars, setReferenceStars);
   }, [setLoadingReferenceStars, setReferenceStars]);
+
   return (
     <VStack spacing={4} align="start" position="relative" width="full">
       <HStack spacing={2} width="full">
@@ -82,7 +89,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
             }}
             transition="all 0.3s"
           />
-          {value && (
+          {loading ? (
+            <InputRightElement>
+              <Spinner />
+            </InputRightElement>
+          ) : value ? (
             <InputRightElement>
               <CloseIcon
                 color="gray.500"
@@ -90,7 +101,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 onClick={() => setSearchTerm("")}
               />
             </InputRightElement>
-          )}
+          ) : null}
         </InputGroup>
       </HStack>
 
