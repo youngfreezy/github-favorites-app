@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   VStack,
@@ -8,10 +8,10 @@ import {
   ListItem,
   InputGroup,
   Text,
-  Box,
   InputRightElement,
 } from "@chakra-ui/react";
-import { CloseIcon, StarIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
+import Star from "./Star";
 import { Repo } from "../App";
 import debounce from "lodash.debounce";
 
@@ -29,6 +29,26 @@ const SearchBar: React.FC<SearchBarProps> = ({
   setSearchTerm,
 }) => {
   const [results, setResults] = useState<any[]>([]);
+  // this is a candidate for moving into Context API or Redux. for now might be overkill.
+  const [referenceStars, setReferenceStars] = useState<number>(0);
+  const [loadingReferenceStars, setLoadingReferenceStars] =
+    useState<boolean>(true);
+  useEffect(() => {
+    const fetchReferenceRepoStars = async () => {
+      try {
+        const { data } = await axios.get(
+          "https://api.github.com/repos/freeCodeCamp/freeCodeCamp"
+        );
+        setReferenceStars(data.stargazers_count);
+      } catch (error) {
+        console.error("Error fetching reference repo stars:", error);
+      } finally {
+        setLoadingReferenceStars(false);
+      }
+    };
+
+    fetchReferenceRepoStars();
+  }, []);
 
   const fetchRepos = async (query: string) => {
     try {
@@ -130,10 +150,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
                   <Text fontSize="sm" color="blue.400">
                     {repo.language || "Unknown"}
                   </Text>
-                  <Box as="span" color="gray.500" fontSize="sm">
-                    <StarIcon boxSize={3} color="yellow.500" mr={1} />
-                    {repo.stargazers_count || 0}
-                  </Box>
+                  <Star
+                    stargazers_count={repo.stargazers_count}
+                    referenceStars={referenceStars}
+                    setLoadingReferenceStars={setLoadingReferenceStars}
+                    loadingReferenceStars={loadingReferenceStars}
+                  />
                 </HStack>
               </VStack>
             </ListItem>
