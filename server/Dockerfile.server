@@ -1,0 +1,20 @@
+# Use an official node runtime as the parent image
+FROM node:14
+
+# Set the working directory in the container
+WORKDIR /server
+
+# Copy package.json and package-lock.json before other files
+# Utilize Docker cache to save re-installing dependencies if unchanged
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the server code
+COPY . .
+
+# App binds to port 4000 so use EXPOSE to have it mapped by the docker daemon
+EXPOSE 4000
+
+CMD ["node", "server.ts"]

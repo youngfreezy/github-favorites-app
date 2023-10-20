@@ -3,21 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/axios": "^0.14.0",
+    "@types/body-parser": "^1.19.4",
+    "@types/express": "^4.17.20",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.59",
     "@types/react": "^18.2.30",
     "@types/react-dom": "^18.2.14",
+    "axios": "^1.5.1",
+    "body-parser": "^1.20.2",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "framer-motion": "^10.16.4",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
     "react-scripts": "5.0.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"react-scripts start\" \"ts-node server/server.ts\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -38,6 +52,16 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@types/lodash.debounce": "^4.0.8"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios).+\\.js$"
     ]
   }
 }

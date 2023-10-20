@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  github-fav-repos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - reposerver
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server
+    ports:
+      - "4000:4000"
+    depends_on:
+      - reposerver
+
+  reposerver:
+    image: gcr.io/hiring-278615/reposerver:v1.1
+    ports:
+      - "8080:8080"
