@@ -96,7 +96,8 @@ const App: React.FC = () => {
   };
 
   const handleSelectRepo = (selectedRepo: RawRepo | Repo) => {
-    if (repos.length < 10) {
+    const reposLimit = 10;
+    if (repos?.length < reposLimit) {
       addRepoMutation.mutate(selectedRepo as any);
       setRepos((prevRepos) =>
         [...prevRepos, selectedRepo].map((item: Repo | RawRepo) =>

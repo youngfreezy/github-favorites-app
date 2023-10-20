@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
   VStack,
@@ -42,9 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  //TODO
-  //eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedFetchRepos = useCallback(debounce(fetchRepos, 300), []);
+  const debouncedFetchRepos = debounce(fetchRepos, 300);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
