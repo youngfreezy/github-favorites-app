@@ -1,10 +1,13 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { Box } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "react-query";
+import { StarsConfigProvider,  } from "./contexts/StarsContext";
+import { transformRepo } from "./helpers/helpers";
 import SearchBar from "./components/SearchBar";
 import RepoList from "./components/RepoList";
 import SortDropdown from "./components/SortDropdown";
 import { throttle } from "lodash";
+
 export interface RawRepo {
   id: string | number;
   full_name?: string;
@@ -37,16 +40,6 @@ const App: React.FC = () => {
     direction: "asc",
   });
   const queryClient = useQueryClient();
-  const transformRepo = (repo: RawRepo): Repo => {
-    return {
-      id: repo.id.toString(),
-      fullName: repo.fullName || repo.full_name || "",
-      createdAt: repo.createdAt || repo.created_at || "",
-      stargazersCount: repo.stargazersCount || repo.stargazers_count || 0,
-      language: repo.language || "unknown",
-      url: repo.url,
-    };
-  };
 
   const throttledFetch = useMemo(() => {
     const getPersistedReposOnMount = async () => {
@@ -120,20 +113,22 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Box padding="5rem">
-      <SearchBar
-        value={searchTerm}
-        onSearch={handleSearch}
-        onSelect={handleSelectRepo}
-        setSearchTerm={setSearchTerm}
-      />
-      <SortDropdown value={sortType} onChange={setSortType} />
-      <RepoList
-        sortType={sortType}
-        repos={repos}
-        onRepoRemove={handleRepoRemove}
-      />
-    </Box>
+    <StarsConfigProvider>
+      <Box padding="5rem">
+        <SearchBar
+          value={searchTerm}
+          onSearch={handleSearch}
+          onSelect={handleSelectRepo}
+          setSearchTerm={setSearchTerm}
+        />
+        <SortDropdown value={sortType} onChange={setSortType} />
+        <RepoList
+          sortType={sortType}
+          repos={repos}
+          onRepoRemove={handleRepoRemove}
+        />
+      </Box>
+    </StarsConfigProvider>
   );
 };
 

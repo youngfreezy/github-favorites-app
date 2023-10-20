@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   VStack,
@@ -14,6 +14,8 @@ import { CloseIcon } from "@chakra-ui/icons";
 import Star from "./Star";
 import { Repo } from "../App";
 import debounce from "lodash.debounce";
+import { useStarsConfig } from "../contexts/StarsContext";
+import { fetchReferenceRepoStars } from "../helpers/apiHelpers";
 
 interface SearchBarProps {
   value: string;
@@ -29,26 +31,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
   setSearchTerm,
 }) => {
   const [results, setResults] = useState<any[]>([]);
-  // this is a candidate for moving into Context API or Redux. for now might be overkill.
-  const [referenceStars, setReferenceStars] = useState<number>(0);
-  const [loadingReferenceStars, setLoadingReferenceStars] =
-    useState<boolean>(true);
-  useEffect(() => {
-    const fetchReferenceRepoStars = async () => {
-      try {
-        const { data } = await axios.get(
-          "https://api.github.com/repos/freeCodeCamp/freeCodeCamp"
-        );
-        setReferenceStars(data.stargazers_count);
-      } catch (error) {
-        console.error("Error fetching reference repo stars:", error);
-      } finally {
-        setLoadingReferenceStars(false);
-      }
-    };
-
-    fetchReferenceRepoStars();
-  }, []);
 
   const fetchRepos = async (query: string) => {
     try {
@@ -79,7 +61,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
     onSelect(repo);
     setResults([]);
   };
-
+  const { setLoadingReferenceStars, setReferenceStars } = useStarsConfig();
+  useEffect(() => {
+    fetchReferenceRepoStars(setLoadingReferenceStars, setReferenceStars);
+  }, [setLoadingReferenceStars, setReferenceStars]);
   return (
     <VStack spacing={4} align="start" position="relative" width="full">
       <HStack spacing={2} width="full">
@@ -150,12 +135,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                   <Text fontSize="sm" color="blue.400">
                     {repo.language || "Unknown"}
                   </Text>
-                  <Star
-                    stargazers_count={repo.stargazers_count}
-                    referenceStars={referenceStars}
-                    setLoadingReferenceStars={setLoadingReferenceStars}
-                    loadingReferenceStars={loadingReferenceStars}
-                  />
+                  <Star stargazers_count={repo.stargazers_count} />
                 </HStack>
               </VStack>
             </ListItem>

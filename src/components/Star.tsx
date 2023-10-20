@@ -1,24 +1,17 @@
 // Star.tsx
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { Box, HStack, Tooltip, Text } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-
+import { useStarsConfig } from "../contexts/StarsContext";
 interface StarProps {
-  stargazers_count: number;
-  referenceStars: number;
-  loadingReferenceStars: boolean;
-  setLoadingReferenceStars: Dispatch<SetStateAction<boolean>>;
+  stargazers_count: number | string | undefined;
 }
 
-const Star: React.FC<StarProps> = ({
-  stargazers_count,
-  referenceStars,
-  loadingReferenceStars,
-  setLoadingReferenceStars,
-}) => {
-  const calculateStarRating = (stars: number): number => {
+const Star: React.FC<StarProps> = ({ stargazers_count }) => {
+  const { referenceStars, loadingReferenceStars } = useStarsConfig();
+  const calculateStarRating = (stars: number | string | undefined): number => {
     if (loadingReferenceStars) return 0;
-    const ratio = stars / referenceStars;
+    const ratio = parseInt(stars as any, 10) / referenceStars;
     return Math.min(5, Math.ceil(ratio * 5));
   };
   return (

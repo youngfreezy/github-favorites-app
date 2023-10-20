@@ -1,12 +1,12 @@
 // src/tests/SearchBar.test.tsx
 
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import SearchBar from "../components/SearchBar";
-import axios from 'axios';
+import axios from "axios";
 
 // Mocking axios
-jest.mock('axios');
+jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("SearchBar", () => {
@@ -15,10 +15,24 @@ describe("SearchBar", () => {
     const fakeResponse = {
       data: {
         items: [
-          { id: "1", name: "repo1", full_name: "user/repo1", description: "description1", language: "JavaScript", stargazers_count: 100 },
-          { id: "2", name: "repo2", full_name: "user/repo2", description: "description2", language: "TypeScript", stargazers_count: 50 }
-        ]
-      }
+          {
+            id: "1",
+            name: "repo1",
+            full_name: "user/repo1",
+            description: "description1",
+            language: "JavaScript",
+            stargazers_count: 100,
+          },
+          {
+            id: "2",
+            name: "repo2",
+            full_name: "user/repo2",
+            description: "description2",
+            language: "TypeScript",
+            stargazers_count: 50,
+          },
+        ],
+      },
     };
     mockedAxios.get.mockResolvedValue(fakeResponse);
 
@@ -26,7 +40,14 @@ describe("SearchBar", () => {
     const handleSelect = jest.fn();
     const setSearchTerm = jest.fn();
 
-    const { getByPlaceholderText, findByText } = render(<SearchBar onSearch={handleSearch} onSelect={handleSelect} value="" setSearchTerm={setSearchTerm} />);
+    const { getByPlaceholderText, findByText } = render(
+      <SearchBar
+        onSearch={handleSearch}
+        onSelect={handleSelect}
+        value=""
+        setSearchTerm={setSearchTerm}
+      />
+    );
 
     // Simulate user typing into the input field
     fireEvent.change(getByPlaceholderText("Search GitHub repos..."), {
