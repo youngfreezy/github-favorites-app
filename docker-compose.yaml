@@ -5,6 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 500M  
     ports:
       - "3000:3000"
     depends_on:
@@ -14,6 +18,10 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
     ports:
       - "4000:4000"
     depends_on:
@@ -21,5 +29,9 @@ services:
 
   reposerver:
     image: gcr.io/hiring-278615/reposerver:v1.1
+    deploy:
+      resources:
+        limits:
+          memory: 500M
     ports:
       - "8080:8080"

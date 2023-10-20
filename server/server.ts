@@ -12,9 +12,7 @@ app.use(bodyParser.json());
 // const REPO_SERVER_URL = "http://localhost:8080";
 
 
-// SEE NOTE: you may not need reposerver-1 but just reposerver, all depends on the name of the container in your
-// docker daemon that is exposing port 8080
-// repo for containerized testing. normally this would come from config.
+// SEE NOTE: this url depends on the name of the container in your docker daemon that is exposing port 8080
 const REPO_SERVER_URL = "http://github-fav-repos-reposerver-1:8080";
 
 app.use(cors());
