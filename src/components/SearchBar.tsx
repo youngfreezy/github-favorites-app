@@ -90,8 +90,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
             transition="all 0.3s"
           />
           {loading ? (
-            <InputRightElement>
-              <Spinner />
+            <InputRightElement marginRight={2}>
+              <Spinner
+                size="xl"
+                color="blue.500"
+                speed="0.65s"
+                emptyColor="gray.200"
+              />
             </InputRightElement>
           ) : value ? (
             <InputRightElement>
